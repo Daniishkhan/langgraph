@@ -70,4 +70,10 @@ workflow.set_entry_point("agent")
 app = workflow.compile()
 
 inputs = {"messages": [HumanMessage(content="what is the weather in sf")]}
-print(app.invoke(inputs))
+for output in app.stream(inputs, stream_mode="updates"):
+    # stream() yields dictionaries with output keyed by node name
+    for key, value in output.items():
+        print(f"Output from node '{key}':")
+        print("---")
+        print(value)
+    print("\n---\n")
